@@ -1,6 +1,6 @@
 # Snakky
 ### Same old snake game with a something different
-![This is an image](/assets/snakeimg.jpg)
+![This is an image](src/assets/snakeimg.jpg)
 
 ## Core Concept 
 
