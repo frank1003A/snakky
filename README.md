@@ -1,6 +1,6 @@
 # Snakky
 
-### Same old snake game with something different
+### Same old snake game with something different - `exploring solidjs`
 
 ![This is an image](src/assets/snakeimg.jpg)
 
