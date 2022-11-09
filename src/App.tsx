@@ -317,13 +317,11 @@ const App: Component = () => {
     let newRows = emptyRows();
     let snake = snakeState.snake;
     let head = { ...snake[snake.length - 1] };
-    let tail = { ...snake[snake.length]}
     snakeState.snake.forEach((elementArr) => {
       newRows[elementArr.x][elementArr.y] = "snake";
     });
     newRows[head.x][head.y] = "snake-head";
     newRows[snakeState.food.x][snakeState.food.y] = "food";
-    console.log(tail);
 
     setSnakeState({ rows: newRows });
   };
