@@ -22,8 +22,11 @@ You can eat them but they have effects on your score during play.
 | 🥩 | score + 5 |
 |🧃 | increases your speed to an uncontrollable state |
 
+## Game Play
+In order to avoid eating the exception, you have to move around for as long as possible until a new food is generated, but be careful, the new food might just be another exception. 😁🤣😂
 ## Todo
 
 - [x] Add play and pause button
 - [ ] mobile compatibility
 - [ ] snake redesign
+- [ ] issue with the bottom and left side of the grid system
