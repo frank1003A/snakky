@@ -1,0 +1,252 @@
+.App {
+  text-align: center;
+}
+
+.logo {
+  animation: logo-spin infinite 20s linear;
+  height: 40vmin;
+  pointer-events: none;
+}
+
+.header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.link {
+  color: #b318f0;
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.board {
+  background: #fff;
+  width: 500px;
+  height: 500px;
+}
+
+.main {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.snake-container {
+  max-width: 502px;
+  max-height: 502px;
+  border: 1px solid black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.grid {
+  width: 500px;
+  height: 500px;
+  margin: auto;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.grid-item {
+  outline: 1px dotted grey;
+  width: 50px;
+  height: 50px;
+}
+
+.snake {
+  /*outline: 1px solid green;*/
+  background-color: green;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  transition: ease-in-out;
+}
+
+.snake-head {
+  background-color: green;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+.snake-head::before {
+  content: "👀";
+  font-size: larger;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.snake-collar {
+  background-color: green;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.snake-tail {
+  background-color: red;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.food {
+  /*outline: 1px solid yellow;
+  background-color: yellow;**/
+  /*outline: 1px solid grey;*/
+  background-color: none;
+  width: 50px;
+  height: 50px;
+  font-size: xx-large;
+  outline: 1px dotted grey;
+}
+
+.food::before {
+  /*content: "🥩";*/
+  content: attr(data-content);
+  font-size: larger;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.game-bg {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  background-color: #eee;
+}
+
+.bounds {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  background-image: url(/src/assets/pngegg.png);
+  background-size: cover;
+  flex-direction: column;
+}
+
+.board {
+  background-color: #fff;
+  width: 200px;
+  height: 40px;
+  font-size: xx-large;
+  font-weight: bold;
+  border: 1px solid green;
+  border-bottom-left-radius: 20px;
+  color: #555;
+  border-top-right-radius: 20px;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-right {
+  background: #eee;
+  width: 50%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: column;
+}
+
+.guides {
+  border: 1px solid green;
+  border-bottom-left-radius: 20px;
+  color: #555;
+  border-top-right-radius: 20px;
+  padding: 10px;
+  font-weight: bold;
+}
+
+.guides table, td, th {
+  
+  border-block-end:1px solid #eee ;
+  justify-content: center;
+}
+
+table {
+  border-collapse: separate;
+}
+
+.banner { 
+  background: #fff;
+  border-radius: 20px;
+  padding: 1rem;
+  max-width: 400px;
+}
+
+
+/* CSS */
+.button-88 {
+  display: flex;
+  align-items: center;
+  font-family: inherit;
+  font-weight: 500;
+  font-size: 16px;
+  width: 150px;
+  display: flex;
+  padding: 0.7em 1.4em 0.7em 1.1em;
+  color: white;
+  background: #ad5389;
+  background: linear-gradient(0deg, rgba(20,167,62,1) 0%, rgba(102,247,113,1) 100%);
+  border: none;
+  box-shadow: 0 0.7em 1.5em -0.5em #14a73e98;
+  letter-spacing: 0.05em;
+  border-radius: 20em;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  justify-content: center;
+}
+
+.button-88:hover {
+  box-shadow: 0 0.5em 1.5em -0.5em #14a73e98;
+}
+
+.button-88:active {
+  box-shadow: 0 0.3em 1em -0.5em #14a73e98;
+}
+
+@media (max-width: 800px) {
+  .game-bg {
+    flex-direction: column;
+    width: max-content;
+    height: 100vh;
+    gap: 1rem;
+  }
+  .sidebar-right {
+    width: 100%;
+    gap: 1rem;
+  }
+  .bounds {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+
+
+
