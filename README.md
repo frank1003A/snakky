@@ -50,7 +50,7 @@ Failing after eating a booster also forces page reload.
 ## Todo
 
 - [x] Add play and pause button
-- [] mobile responsiveness with onscreen buttons
+- [ ] mobile responsiveness with onscreen buttons
 - [x] snake redesign
 - [x] issue with the bottom and left side of the grid system
-- [] Transition and general flow control
+- [ ] Transition and general flow control
