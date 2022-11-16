@@ -1,19 +1,10 @@
-import {
-  Component,
-  createSignal,
-  createEffect,
-  createSelector,
-  JSXElement,
-  createRenderEffect,
-} from "solid-js";
+import { Component, createEffect, createSignal, onMount } from 'solid-js';
+import { createStore } from 'solid-js/store';
 
-import logo from "./logo.svg";
-import styles from "./App.module.css";
-import Button from "./components/Button";
-import Header from "./components/Header";
-import Board, { cor_const } from "./components/Board";
-import ScoreBoard from "./components/ScoreBoard";
-import { createStore } from "solid-js/store";
+import styles from './App.module.css';
+import Board, { cor_const } from './components/Board';
+import Button from './components/Button';
+import ScoreBoard from './components/ScoreBoard';
 
 interface GlobalGameState {
   rows: string[][];
@@ -45,12 +36,12 @@ const App: Component = () => {
   const Friend = "🐍";
   // our snake does not like pizza, throws up
   const Yuck = "🍕";
-  // obviously nobody likes to eat stone.
-  const Stone = "🧱";
+  // obviously nobody likes to eat Brick.
+  const Brick = "🧱";
   // our snake loves beef
   const bestFood = "🥩";
   // our snake becomes really fast
-  const booster = "🧃"
+  const booster = "🧃";
 
   /**The board rows rendered on a grid system*/
   const emptyRows = () =>
@@ -58,7 +49,7 @@ const App: Component = () => {
       [...Array(cor_const.HEIGHT)].map((_) => "grid-item")
     );
 
-    /**Random x and y coordinates for the grid system*/
+  /**Random x and y coordinates for the grid system*/
   const getRandom = (): { x: number; y: number } => {
     return {
       x: Math.floor(Math.random() * cor_const.WIDTH),
@@ -66,25 +57,44 @@ const App: Component = () => {
     };
   };
 
+  let initialStateValue: GlobalGameState = {
+    rows: emptyRows(),
+    snake: [{ x: 5, y: 5 }],
+    food: getRandom(),
+    direction: Direction.RIGHT,
+    speed: Speed.SLOW,
+  };
+
   // create initial snake state
   const [snakeState, setSnakeState] = createStore<GlobalGameState>({
-    rows: emptyRows(),
-    snake: [getRandom()],
-    food: getRandom(),
-    direction: Direction.STOP,
-    speed: Speed.SLOW,
+    ...initialStateValue,
   });
 
   // score
-  const [score, setScore] = createSignal(snakeState.snake.length - 1);
+  const [score, setScore] = createSignal<number>(0);
 
   // PLAY and PAUSE
   const [playPause, setPlayPause] = createSignal<boolean>(false);
 
-  /** 
+  // mount
+  const [mount, setMount] = createSignal<boolean>(false);
+
+  // Game Over
+  const [gameOver, setGameOver] = createSignal<boolean>(false);
+
+  // eating Brick
+  const [eatenBrick, setEatenBrick] = createSignal<boolean>(false);
+
+  // eating Booster
+  const [eatenBooster, setEatenBooster] = createSignal<boolean>(false)
+
+  const increaseSpeed = (speed: number) => {
+    setSnakeState({ speed: speed });
+  };
+
+  /**
    * Genertes random food types for snake
-   * avoid whatever food the snake does not like
-  */
+   */
   const getRandomFood = () => {
     const foods = [
       "🍗",
@@ -101,101 +111,37 @@ const App: Component = () => {
       "🌵",
       `${Yuck}`,
       `${bestFood}`,
-      `${Stone}`,
+      `${Brick}`,
       `${Friend}`,
-      `${booster}`
+      `${booster}`,
     ];
-    let randFood = foods[Math.floor(Math.random() * foods.length)]
+    let randFood = foods[Math.floor(Math.random() * foods.length)];
     return randFood;
   };
 
-  /**Snake likes beef so it gains 5 score point but only increases ones */
-  const bestSnakeFood = () => {
-    let snake = [...snakeState.snake];
-    let head = { ...snake[snake.length - 1] };
-    let food = snakeState.food;
-    let inFoodPosition = head.x === food.x && head.y === food.y;
-    let snakeLength = snake.length - 1;
-
-    if (inFoodPosition && generatedFood.randFood === bestFood) {
-      alert("Tasty")
-      // +5
-      setScore(snakeLength + 5);
-    }
-  };
-
-  /**It looses all point and looses body length too */
-  const friendFoodException = () => {
-    let state = { ...snakeState };
-    let snake = [...snakeState.snake];
-    let head = { ...snake[snake.length - 1] };
-    let food = snakeState.food;
-    let inFoodPosition = head.x === food.x && head.y === food.y;
-    if (inFoodPosition && generatedFood.randFood === Friend) {
-      alert("We don't eat our friends")
-      //start from 0
-      snake.splice(1, snake.length);
-      setSnakeState({
-        snake: snake,
-      });
-      setScore(0);
-    }
-  };
-
-  const pizzaFoodException = () => {
-    let state = { ...snakeState };
-    let snake = [...snakeState.snake];
-    let head = { ...snake[snake.length - 1] };
-    let food = snakeState.food;
-    let inFoodPosition = head.x === food.x && head.y === food.y;
-    if (inFoodPosition && generatedFood.randFood === Yuck) {
-      alert("Pizza is disgusting")
-      // loose 2 point
-      snake.length - 1 < 2
-        ? snake.splice(0, 0)
-        : snake.splice(snake.length - 2, snake.length);
-      setSnakeState({
-        snake: snake,
-      });
-      setScore(snake.length);
-    }
-  };
-
-  const stoneFoodException = () => {
-    let state = { ...snakeState };
-    let snake = [...snakeState.snake];
-    let head = { ...snake[snake.length - 1] };
-    let food = snakeState.food;
-    let inFoodPosition = head.x === food.x && head.y === food.y;
-    if (inFoodPosition && generatedFood.randFood === Stone) {
-      // game over
-      alert(`game over: ${score()}`);
-      gameOver();
-    }
-  };
-
-  const boosterException = () => {
-    let state = { ...snakeState };
-    let snake = [...snakeState.snake];
-    let head = { ...snake[snake.length - 1] };
-    let food = snakeState.food;
-    let inFoodPosition = head.x === food.x && head.y === food.y;
-    if (inFoodPosition && generatedFood.randFood === booster) {
-      // increase speed to FAST
-      increaseSpeed(Speed.FAST)
-    }
-  }
-
-  const gameOver = () => {
-    let snake = [...snakeState.snake];
-    snake.splice(1, snake.length);
+  /** stop every activity */
+  const cancelGame = () => {
     setScore(0);
-    setSnakeState({
+    clearInterval(foodTime);
+    clearInterval(motionTime);
+    setGameOver(true);
+    setSnakeState((prev) => ({
+      snake: [{ x: 5, y: 5 }],
+      food: getRandom(),
       direction: 32,
-      snake: snake,
-    });
+    }));
+    setGeneratedFood({ randFood: getRandomFood() });
   };
 
+  /**Restart game by reintializing states so to counter page reloads */
+  const restartGame = () => {
+    setGameOver(false);
+    setEatenBrick(false);
+    foodTime = setInterval(foodTimeOut, 3000);
+    motionTime = setInterval(moveSnake, snakeState.speed);
+  };
+
+  /**New food should regenerate every 3 seconds */
   const foodTimeOut = () => {
     let snake = [...snakeState.snake];
     let head = { ...snake[snake.length - 1] };
@@ -208,18 +154,75 @@ const App: Component = () => {
     }
   };
 
-  createEffect(() => {
-    bestSnakeFood();
-    friendFoodException();
-    pizzaFoodException();
-    stoneFoodException();
-    boosterException();
-  });
-
-  createEffect(() => setInterval(foodTimeOut, 3000));
-
   const [generatedFood, setGeneratedFood] = createStore<{ randFood: string }>({
     randFood: getRandomFood(),
+  });
+
+  const checkException = () => {
+    let snake = [...snakeState.snake];
+    let head = { ...snake[snake.length - 1] };
+    let food = snakeState.food;
+    let inFoodPosition = head.x === food.x && head.y === food.y;
+    if (inFoodPosition) {
+      switch (generatedFood.randFood) {
+        case bestFood:
+          alert("Tasty");
+          score() >= 0
+            ? setScore((score) => {
+                let newscore = score + 4;
+                score = newscore;
+                return score;
+              })
+            : setScore(score);
+          break;
+
+        case Yuck:
+          alert("Pizza is disgusting");
+          score() >= 2
+            ? setScore((score) => {
+                let newscore = score - 3;
+                score = newscore;
+                return score;
+              })
+            : setScore(score);
+          break;
+
+        case Friend:
+          alert("We don't eat our friends");
+          score() > 0
+            ? setScore((score) => {
+                let newscore = 0;
+                score = newscore;
+                return score;
+              })
+            : setScore(score);
+          break;
+
+        case Brick:
+          setEatenBrick(true);
+          setGameOver(true);
+          cancelGame();
+          break;
+
+        case booster:
+          setEatenBooster(true)
+          increaseSpeed(Speed.FAST)
+          break;
+
+        default:
+          break;
+      }
+    }
+  };
+
+  // food timeout interval
+  let foodTime = 0;
+
+  // motion interval
+  let motionTime = 0;
+
+  createEffect(() => {
+    foodTime = setInterval(foodTimeOut, 3000);
   });
 
   const displayRows = () => {
@@ -278,29 +281,29 @@ const App: Component = () => {
     let snakecopy = [...snakeState.snake];
     let head = { ...snakecopy[snakecopy.length - 1] };
 
-    const Height = cor_const.HEIGHT - 1;
-    const Width = cor_const.WIDTH - 1;
+    const Height = cor_const.HEIGHT + 1;
+    const Width = cor_const.WIDTH + 1;
 
-    /* keep the value within range of 0 to HEIGHT */
+    /*keep the value within range of 0 to HEIGHT */
     head.x += Height * (Number(head.x < 0) - Number(head.x >= Height));
     head.y += Width * (Number(head.y < 0) - Number(head.y >= Width));
 
-    switch (snakeState.direction) {
-      case Direction.LEFT:
-        head.y += -1;
-        break;
-      case Direction.UP:
-        head.x += -1;
-        break;
-      case Direction.RIGHT:
-        head.y += 1;
-        break;
-      case Direction.DOWN:
-        head.x += 1;
-        break;
-      default:
-        return;
-    }
+      switch (snakeState.direction) {
+        case Direction.LEFT:
+          head.y += -1;
+          break;
+        case Direction.UP:
+          head.x += -1;
+          break;
+        case Direction.RIGHT:
+          head.y += 1;
+          break;
+        case Direction.DOWN:
+          head.x += 1;
+          break;
+        default:
+          return;
+      }
 
     snakecopy.push(head);
     snakecopy.shift();
@@ -311,6 +314,27 @@ const App: Component = () => {
 
     //update
     update();
+  };
+
+  const isSnakeOutofBound = () => {
+    let snakecopy = [...snakeState.snake];
+    let head = { ...snakecopy[snakecopy.length - 1] };
+    let rowsLength = snakeState.rows.length;
+    let outofBounds = false;
+    if (
+      head.x === -1 ||
+      head.x === rowsLength ||
+      head.y === -1 ||
+      head.y === rowsLength
+    )
+      outofBounds = true;
+    return outofBounds;
+  };
+
+  const onSnakeOutofBounds = () => {
+    if (isSnakeOutofBound()) {
+      cancelGame();
+    }
   };
 
   const update = () => {
@@ -328,14 +352,24 @@ const App: Component = () => {
 
   const handlePlayStop = () => {
     let pauseGame = 32;
-    let startGame = 39;
-    if (playPause() === true) setSnakeState({ direction: pauseGame });
-    if (playPause() === false) setSnakeState({ direction: startGame });
+    let restartGame = 39;
+    if (playPause() === true) setSnakeState({ direction: restartGame });
+    if (playPause() === false) setSnakeState({ direction: pauseGame });
   };
 
   createEffect(() => {
-    setInterval(moveSnake, snakeState.speed);
-    document.onkeydown = ({ keyCode }) => changeDirection(keyCode);
+    motionTime = setInterval(moveSnake, snakeState.speed);
+    document.onkeydown = ({ keyCode }) => {
+      if (mount() || gameOver()) {
+        // do nothing 
+      } else {
+        changeDirection(keyCode);
+      }
+    }
+  });
+
+  createEffect(() => {
+    onSnakeOutofBounds();
   });
 
   createEffect(() => {
@@ -347,16 +381,11 @@ const App: Component = () => {
     let head = { ...snake[snake.length - 1] };
     for (let i = 0; i < snake.length - 3; i++) {
       if (head.x === snake[i].x && head.y === snake[i].y) {
-        setSnakeState(snakeState);
-        alert(`game over: ${score()}`);
-        gameOver()
+        cancelGame();
+        setGameOver(true);
       }
     }
   };
-
-  const increaseSpeed = (speed: number) => {
-    setSnakeState({speed: speed})
-  }
 
   const isEaten = () => {
     let snakecopy = [...snakeState.snake];
@@ -367,33 +396,73 @@ const App: Component = () => {
       setSnakeState({
         snake: snakecopy,
         food: getRandom(),
-       // speed: increaseSpeed(snakeState.speed),
+        //speed: increaseSpeed(snakeState.speed),
       });
-      setScore(snakeState.snake.length);
+      setScore((score) => score + 1);
       setGeneratedFood({ randFood: getRandomFood() });
+      checkException();
     }
   };
 
   createEffect(() => {
     isCollapsed();
+  });
+
+  createEffect(() => {
     isEaten();
   });
 
-  //{'🎇 You are Exceptional, watch out!'}
+  onMount(() => {
+    setMount(true);
+  });
 
   return (
-    <div
-      class={styles["game-bg"]}
-    >
-      <Board
-        displayRows={displayRows}
-        bannerMessage={`🎇 Snakky.com, watch out for ${Friend}, ${Stone}, ${Yuck}, ${bestFood}, ${booster}`}
-      />
-      <ScoreBoard
-        btnCurrent={playPause() === true ? "PLAY" : "PAUSE"}
-        score={score()}
-        onClick={() => setPlayPause(!playPause())}
-      />
+    <div class={styles["main-container"]}>
+      {mount() ? (
+        <div class={styles["backdrop"]}>
+          <Button
+            text="Start Game"
+            onClick={() => {
+              setPlayPause(true);
+              setMount(false);
+            }}
+          />
+          <div>
+            <h1 class={styles["txtlogo"]}>Snakky.com</h1>
+            <h5 class={styles["txtwrtup"]}>Something a little bit different</h5>
+          </div>
+        </div>
+      ) : null}
+      {gameOver() ? (
+        <div class={styles["backdrop"]}>
+          <div class={styles["banner"]}>
+            {eatenBrick() ? <p>You ate {Brick} </p> : null}
+            {eatenBooster() ? <p>{booster} forced a restart</p>: null}
+          </div>
+          <h1 class={styles["txtlogo"]}>Game Over</h1>
+          {eatenBooster() ? null : (
+            <Button text="Restart Game" onClick={() => restartGame()} />
+          )}
+          <Button
+            text="End Game"
+            styleOverride={{
+              background: "red",
+            }}
+            onClick={() => window.location.reload()}
+          />
+        </div>
+      ) : null}
+      <div class={styles["game-bg"]}>
+        <Board
+          displayRows={displayRows}
+          bannerMessage={`🎇 Snakky.com, watch out for ${Friend}, ${Brick}, ${Yuck}, ${bestFood}, ${booster}`}
+        />
+        <ScoreBoard
+          btnCurrent={playPause() === false ? "PLAY" : "PAUSE"}
+          score={score()}
+          onClick={() => setPlayPause(!playPause())}
+        />
+      </div>
     </div>
   );
 };

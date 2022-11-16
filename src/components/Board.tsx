@@ -23,23 +23,3 @@ const Board: Component<BoardProps> = (props: BoardProps) => {
 };
 
 export default Board;
-
-/**return (
-                <div className="snake-container">
-                    <div className="grid">{displayRows}</div>
-                </div>
-        )     */
-
-/**<div
-      style={{
-        background: "rgb(85, 85, 85)",
-        width: "50%",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <div class={styles.board}>
-        <Snake/>
-      </div>
-    </div> */

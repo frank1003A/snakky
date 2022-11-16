@@ -63,6 +63,7 @@ const ScoreBoard: Component<ScoreBoardProps> = (props: ScoreBoardProps) => {
           width: "100%",
           "align-items": "center",
           "justify-content": "center",
+          "padding": "1rem 0px 1rem 0px"
         }}
       >
         <Button text={props.btnCurrent} onClick={props.onClick} />

@@ -1,3 +1,5 @@
+/**************Snakky.com******************/
+
 .App {
   text-align: center;
 }
@@ -57,6 +59,8 @@
 }
 
 .grid {
+  max-width: 500px;
+  max-height: 500px;
   width: 500px;
   height: 500px;
   margin: auto;
@@ -67,6 +71,8 @@
 
 .grid-item {
   outline: 1px dotted grey;
+  max-width: 50px;
+  max-height: 50px;
   width: 50px;
   height: 50px;
 }
@@ -109,9 +115,6 @@
 }
 
 .food {
-  /*outline: 1px solid yellow;
-  background-color: yellow;**/
-  /*outline: 1px solid grey;*/
   background-color: none;
   width: 50px;
   height: 50px;
@@ -197,6 +200,31 @@ table {
   max-width: 400px;
 }
 
+.backdrop {
+  width: 100%;
+  display: flex;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  gap: 1rem;
+  align-content: center;
+  backdrop-filter: brightness(.1);
+  position: absolute;
+  flex-direction: column;
+}
+
+.txtlogo {
+  color: springgreen;
+  text-decoration: overline;
+}
+
+.txtwrtup {
+  color: #fff;
+  font-size: small;
+  text-align: center;
+}
+
 
 /* CSS */
 .button-88 {
@@ -231,21 +259,68 @@ table {
 }
 
 @media (max-width: 800px) {
+
+  .snake-container {
+    width: fit-content;
+    height: fit-content;
+  }
+
+  .grid {
+    width: 350px;
+    height: 400px;
+  }
+
+  .grid-item {
+    width: 35px;
+    height: 40px;
+  }
+  .snake, .snake-head, .food{
+    width: 35px;
+    height: 40px;
+  }
+
+  .food::before {
+    font-size: large;
+  }
+
   .game-bg {
     flex-direction: column;
     width: max-content;
-    height: 100vh;
+    height: 100%;
     gap: 1rem;
   }
   .sidebar-right {
     width: 100%;
     gap: 1rem;
+    padding: 1rem 0px 1rem 0px;
   }
   .bounds {
-    width: 100%;
     height: 100%;
+    padding: 1rem 0px 1rem 0px;
+    gap: inherit;
+  }
+
+  .backdrop {
+    width: 100%;
+    height: 100vh;
+    position: fixed;
+  }
+
+  .banner {
+    width: 300px;
+   font-size: small;
   }
 }
+
+@media (max-width: 400px) {
+
+  .backdrop {
+    width: 100%;
+    height: 100vh;
+  }
+}
+
+
 
 
 
