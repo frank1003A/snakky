@@ -24,27 +24,28 @@ You can eat them but they have effects on game play.
 |🧃 | increases your speed to an uncontrollable state |
 
 ## Game Play
-> Avoiding Exceptions
+### Avoiding Exceptions
 In order to avoid eating the exception, you have to move around for as long as possible until a new food is generated, but be careful, the new food might just be another exception. 😁🤣😂
 
-> General 
-You must stay within the bounds of the grid system else you fail the game. 
+### General 
+Eat as much food as possible without hitting the grid system bounds. Stay away from exceptions.
+If you eat an exception when your score is equal to zero or less than two, your point will not change.
 
-> 🐍 - Friend 
-This is an exception that can be visualized as a friend to the snake. Eating sets your score back to zero.
-if score is equal to zero, no effect takes place.
+### 🐍 - Friend 
+This is an exception that can be visualized as a friend to the snake. Eating it sets your score back to zero.
+if score prior to eating this exception is equal to zero, no effect takes place.
 
-> 🧱 - Brick
+###  🧱 - Brick
 This exception is powerful, since eating it kills the game. Just visualize a snake eating a brick and sustaining injuries. It's definitely over for that snake.
 
-> 🍕 - Pizza 
+### 🍕 - Pizza 
 This exception is straight-forward, the snake does not like pizza, but eats it anyways, the effect though is that 
 you lose 2 points if score is greater than 2 else no point is added
 
-> 🥩 - Beef 
+### 🥩 - Beef 
 This is not neccessarily an exception, but an exception to the exceptions, hence an exception. it's just food that the snake likes best, eating it adds five point to current score.
 
-> 🧃 - Booster 
+### 🧃 - Booster 
 This exception is deadly, it increases the snake speed tremendously so as to make it impossible to control.
 Failing after eating a booster also forces page reload.
 ## Todo
