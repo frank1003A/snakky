@@ -1,6 +1,6 @@
 import { Component, ComponentProps, JSXElement } from "solid-js";
 import styles from "../../src/App.module.css";
-import Controls from "./controls";
+import Controls from "./Controls";
 import { score } from "./../App";
 import Button from "./Button";
 import { playPause, setPlayPause } from "../App";
