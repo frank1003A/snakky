@@ -1,10 +1,10 @@
-import { Component, createEffect, createSignal, onMount } from 'solid-js';
-import { createStore } from 'solid-js/store';
+import { Component, createEffect, createSignal, onMount } from "solid-js";
+import { createStore } from "solid-js/store";
 
-import styles from './App.module.css';
-import Board, { cor_const } from './components/Board';
-import Button from './components/Button';
-import ScoreBoard from './components/ScoreBoard';
+import styles from "./App.module.css";
+import Board, { cor_const } from "./components/Board";
+import Button from "./components/Button";
+import ScoreBoard from "./components/ScoreBoard";
 
 interface GlobalGameState {
   rows: string[][];
@@ -14,6 +14,25 @@ interface GlobalGameState {
   speed: number;
   head?: { x: number; y: number };
 }
+
+let initialStateValue: GlobalGameState = {
+  rows: [["grid-item"]],
+  snake: [{ x: 5, y: 5 }],
+  food: { x: 0, y: 0 },
+  direction: 39,
+  speed: 500,
+};
+
+// create initial snake state
+const [snakeState, setSnakeState] = createStore<GlobalGameState>({
+  ...initialStateValue,
+});
+
+// score
+const [score, setScore] = createSignal<number>(0);
+
+// PLAY and PAUSE
+const [playPause, setPlayPause] = createSignal<boolean>(false);
 
 const App: Component = () => {
   enum Direction {
@@ -57,25 +76,6 @@ const App: Component = () => {
     };
   };
 
-  let initialStateValue: GlobalGameState = {
-    rows: emptyRows(),
-    snake: [{ x: 5, y: 5 }],
-    food: getRandom(),
-    direction: Direction.RIGHT,
-    speed: Speed.SLOW,
-  };
-
-  // create initial snake state
-  const [snakeState, setSnakeState] = createStore<GlobalGameState>({
-    ...initialStateValue,
-  });
-
-  // score
-  const [score, setScore] = createSignal<number>(0);
-
-  // PLAY and PAUSE
-  const [playPause, setPlayPause] = createSignal<boolean>(false);
-
   // mount
   const [mount, setMount] = createSignal<boolean>(false);
 
@@ -86,7 +86,7 @@ const App: Component = () => {
   const [eatenBrick, setEatenBrick] = createSignal<boolean>(false);
 
   // eating Booster
-  const [eatenBooster, setEatenBooster] = createSignal<boolean>(false)
+  const [eatenBooster, setEatenBooster] = createSignal<boolean>(false);
 
   const increaseSpeed = (speed: number) => {
     setSnakeState({ speed: speed });
@@ -205,8 +205,8 @@ const App: Component = () => {
           break;
 
         case booster:
-          setEatenBooster(true)
-          increaseSpeed(Speed.FAST)
+          setEatenBooster(true);
+          increaseSpeed(Speed.FAST);
           break;
 
         default:
@@ -288,22 +288,22 @@ const App: Component = () => {
     head.x += Height * (Number(head.x < 0) - Number(head.x >= Height));
     head.y += Width * (Number(head.y < 0) - Number(head.y >= Width));
 
-      switch (snakeState.direction) {
-        case Direction.LEFT:
-          head.y += -1;
-          break;
-        case Direction.UP:
-          head.x += -1;
-          break;
-        case Direction.RIGHT:
-          head.y += 1;
-          break;
-        case Direction.DOWN:
-          head.x += 1;
-          break;
-        default:
-          return;
-      }
+    switch (snakeState.direction) {
+      case Direction.LEFT:
+        head.y += -1;
+        break;
+      case Direction.UP:
+        head.x += -1;
+        break;
+      case Direction.RIGHT:
+        head.y += 1;
+        break;
+      case Direction.DOWN:
+        head.x += 1;
+        break;
+      default:
+        return;
+    }
 
     snakecopy.push(head);
     snakecopy.shift();
@@ -357,15 +357,48 @@ const App: Component = () => {
     if (playPause() === false) setSnakeState({ direction: pauseGame });
   };
 
+  const controlBtn = (dir: Direction) => {
+    let direction = snakeState.direction;
+    switch (dir) {
+      case Direction.LEFT:
+        direction =
+          direction === Direction.RIGHT ? Direction.RIGHT : Direction.LEFT;
+        break;
+
+      case Direction.RIGHT:
+        direction =
+          direction === Direction.LEFT ? Direction.LEFT : Direction.RIGHT;
+        break;
+
+      case Direction.UP:
+        direction =
+          direction === Direction.DOWN ? Direction.DOWN : Direction.UP;
+        break;
+
+      case Direction.DOWN:
+        direction = direction === Direction.UP ? Direction.UP : Direction.DOWN;
+        break;
+
+      case Direction.STOP:
+        direction = Direction.STOP;
+        break;
+
+      default:
+        break;
+    }
+    // set state
+    setSnakeState({ direction: direction });
+  };
+
   createEffect(() => {
     motionTime = setInterval(moveSnake, snakeState.speed);
     document.onkeydown = ({ keyCode }) => {
       if (mount() || gameOver()) {
-        // do nothing 
+        // do nothing
       } else {
         changeDirection(keyCode);
       }
-    }
+    };
   });
 
   createEffect(() => {
@@ -425,6 +458,13 @@ const App: Component = () => {
             onClick={() => {
               setPlayPause(true);
               setMount(false);
+              setSnakeState({
+                rows: emptyRows(),
+                snake: [{ x: 5, y: 5 }],
+                food: getRandom(),
+                direction: Direction.RIGHT,
+                speed: Speed.SLOW,
+              });
             }}
           />
           <div>
@@ -437,7 +477,7 @@ const App: Component = () => {
         <div class={styles["backdrop"]}>
           <div class={styles["banner"]}>
             {eatenBrick() ? <p>You ate {Brick} </p> : null}
-            {eatenBooster() ? <p>{booster} forced a restart</p>: null}
+            {eatenBooster() ? <p>{booster} forced a restart</p> : null}
           </div>
           <h1 class={styles["txtlogo"]}>Game Over</h1>
           {eatenBooster() ? null : (
@@ -467,4 +507,5 @@ const App: Component = () => {
   );
 };
 
+export { setSnakeState, score, playPause, setPlayPause };
 export default App;

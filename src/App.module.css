@@ -258,7 +258,45 @@ table {
   box-shadow: 0 0.3em 1em -0.5em #14a73e98;
 }
 
+.btn-controls {
+  display: flex;
+}
+
+.btn-controls button {
+  height: 40px;
+  width: 40px;
+}
+
+.xl-board {
+  background-color: #fff;
+  width: 200px;
+  height: 40px;
+  font-size: xx-large;
+  font-weight: bold;
+  border: 1px solid green;
+  border-bottom-left-radius: 20px;
+  color: #555;
+  border-top-right-radius: 20px;
+  display: none;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-container {
+  gap: 1rem;
+  display: none;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 0px 1rem 0px;
+}
+
 @media (max-width: 800px) {
+
+  .sidebar-right {
+    display: none;
+  }
 
   .snake-container {
     width: fit-content;
@@ -310,16 +348,28 @@ table {
     width: 300px;
    font-size: small;
   }
+
+  .xl-board {
+    display: flex;
+  }
+
+  .board {
+    display: none
+  }
+
+  .btn-container {
+    display: flex;
+  }
 }
 
 @media (max-width: 400px) {
 
   .backdrop {
     width: 100%;
-    height: 100vh;
+    height: 100%;
+    position: fixed;
   }
 }
-
 
 
 

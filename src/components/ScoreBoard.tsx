@@ -2,9 +2,9 @@ import { Component, ComponentProps } from "solid-js";
 import solid from "solid-js";
 import styles from "../App.module.css";
 import Button from "./Button";
+import { playPause, score, setPlayPause } from "../App";
 
 interface ScoreBoardProps extends ComponentProps<any> {
-  score: number;
   onClick?: solid.JSX.EventHandlerUnion<HTMLButtonElement, MouseEvent>;
   btnCurrent?: string;
 }
@@ -55,18 +55,12 @@ const ScoreBoard: Component<ScoreBoardProps> = (props: ScoreBoardProps) => {
         </table>
       </div>
 
-      <div class={styles["board"]}>SCORE: {props.score}</div>
-      <div
-        style={{
-          gap: "1rem",
-          display: "flex",
-          width: "100%",
-          "align-items": "center",
-          "justify-content": "center",
-          "padding": "1rem 0px 1rem 0px"
-        }}
-      >
-        <Button text={props.btnCurrent} onClick={props.onClick} />
+      <div class={styles["board"]}>SCORE: {score}</div>
+      <div class={styles["btn-container"]}>
+        <Button
+          text={playPause() === false ? "PLAY" : "PAUSE"}
+          onClick={() => setPlayPause(!playPause())}
+        />
         <Button
           text="Restart"
           styleOverride={{
