@@ -1,5 +1,7 @@
 # Snakky
 
+https://snakky.vercel.app/
+
 ### Same old snake game with something different - `exploring solidjs`
 
 ![Snakky_image](src/assets/snakeimg.jpg)
