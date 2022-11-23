@@ -10,10 +10,12 @@ const Controls: Component = () => {
     let down = "🔻"
     return (
         <div class={styles["btn-controls"]}>
-            <button onClick={() => setSnakeState({direction: 37})}>{left}</button>
             <button onClick={() => setSnakeState({direction: 38})}>{up}</button>
-            <button onClick={() => setSnakeState({direction: 39})}>{right}</button>
+            <div>
+            <button onClick={() => setSnakeState({direction: 37})}>{left}</button>
             <button onClick={() => setSnakeState({direction: 40})}>{down}</button>
+            <button onClick={() => setSnakeState({direction: 39})}>{right}</button>
+            </div>
         </div>
     )
 }

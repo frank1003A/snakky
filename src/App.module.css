@@ -260,11 +260,18 @@ table {
 
 .btn-controls {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 .btn-controls button {
   height: 40px;
   width: 40px;
+}
+
+.btn-controls > div {
+  display: flex;
 }
 
 .xl-board {
